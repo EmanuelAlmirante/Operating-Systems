@@ -30,7 +30,7 @@ void *client_thread(void *arg) {
 
 	for (j=NUM_SHARDS-1; j>=0; j--) {	
 		for (i=NUM_EL; i>=0; i--) {
-			sprintf(key, "k-c%d-%d",client_id,i);
+			sprintf(key, "k-%d",i);
 			sprintf(value, "val:%d",i);
 			v=kos_put(client_id, j, key,value);
 			DEBUG("C:%d  <%s,%s> inserted in shard %d. Prev Value=%s\n", client_id, key, value, j, ( v==NULL ? "<missing>" : v ) );
@@ -41,13 +41,9 @@ void *client_thread(void *arg) {
 
 	for (j=NUM_SHARDS-1; j>=0; j--) {	
 		for (i=0; i<NUM_EL; i++) {
-			sprintf(key, "k-c%d-%d",client_id,i);
+			sprintf(key, "k-%d",i);
 			sprintf(value, "val:%d",i);
 			v=kos_get(client_id, j, key);
-			if (strncmp(v,value,KEY_SIZE)!=0) {
-				printf("Error on key %s value should be %s and was returned %s",key,value,v);
-				exit(1);
-			}
 			DEBUG("C:%d  %s %s found in shard %d: value=%s\n", client_id, key, ( v==NULL ? "has not been" : "has been" ),j,
 									( v==NULL ? "<missing>" : v ) );
 	
@@ -58,13 +54,9 @@ void *client_thread(void *arg) {
 
 	for (j=NUM_SHARDS-1; j>=0; j--) {	
 		for (i=NUM_EL-1; i>=NUM_EL/2; i--) {
-			sprintf(key, "k-c%d-%d",client_id,i);
+			sprintf(key, "k-%d",i);
 			sprintf(value, "val:%d",i);
 			v=kos_remove(client_id, j, key);
-			if (strncmp(v,value,KEY_SIZE)!=0) {
-				printf("Error when removing key %s value should be %s and was returned %s",key,value,v);
-				exit(1);
-			}
 			DEBUG("C:%d  %s %s removed from shard %d. value =%s\n", client_id, key, ( v==NULL ? "has not been" : "has been" ),j,
 									( v==NULL ? "<missing>" : v ) );
 		}
@@ -74,17 +66,9 @@ void *client_thread(void *arg) {
 
 	for (j=NUM_SHARDS-1; j>=0; j--) {	
 		for (i=0; i<NUM_EL; i++) {
-			sprintf(key, "k-c%d-%d",client_id,i);
+			sprintf(key, "k-%d",i);
 			sprintf(value, "val:%d",i);
 			v=kos_get(client_id, j, key);
-			if (i>=NUM_EL/2 && v!=NULL) {
-				printf("Error when gettin key %s value should be NULL and was returned %s",key,v);
-				exit(1);
-			}
-			if (i<NUM_EL/2 && strncmp(v,value,KEY_SIZE)!=0 ) {
-				printf("Error on key %s value should be %s and was returned %s",key,value,v);
-				exit(1);
-			}
 			DEBUG("C:%d  %s %s found in shard %d. value=%s\n", client_id, key, ( v==NULL ? "has not been" : "has been" ) ,j, ( v==NULL ? "<missing>" : v ) );
 		}
 	}
@@ -94,20 +78,10 @@ void *client_thread(void *arg) {
 
 	for (j=NUM_SHARDS-1; j>=0; j--) {	
 		for (i=0; i<NUM_EL; i++) {
-			sprintf(key, "k-c%d-%d",client_id,i);
+			sprintf(key, "k-%d",i);
 			sprintf(value, "val:%d",i*10);
 			sprintf(value2, "val:%d",i*1);
 			v=kos_put(client_id, j, key,value);
-
-			if (i>=NUM_EL/2 && v!=NULL) {
-				printf("Error when getting key %s value should be NULL and was returned %s",key,v);
-				exit(1);
-			}
-			if (i<NUM_EL/2 && strncmp(v,value2,KEY_SIZE)!=0 ) {
-				printf("Error on key %s value should be %s and was returned %s",key,value2,v);
-				exit(1);
-			}
-
 
 			DEBUG("C:%d  <%s,%s> inserted in shard %d. Prev Value=%s\n", client_id, key, value, j, ( v==NULL ? "<missing>" : v ) );
 		}
@@ -118,13 +92,10 @@ void *client_thread(void *arg) {
 
 	for (j=NUM_SHARDS-1; j>=0; j--) {	
 		for (i=0; i<NUM_EL; i++) {
-			sprintf(key, "k-c%d-%d",client_id,i);
+			sprintf(key, "k-%d",i);
 			sprintf(value, "val:%d",i*10);
 			v=kos_get(client_id, j, key);
-			if (strncmp(v,value,KEY_SIZE)!=0) {
-				printf("Error on key %s value should be %s and was returned %s",key,value,v);
-				exit(1);
-			}
+
 			DEBUG("C:%d  %s %s found in shard %d: value=%s\n", client_id, key, ( v==NULL ? "has not been" : "has been" ),j,
 									( v==NULL ? "<missing>" : v ) );
 	
@@ -146,8 +117,6 @@ int main(int argc, const  char* argv[] ) {
 	int* ids=(int*) malloc(sizeof(int)*NUM_CLIENT_THREADS);
 
 	ret=kos_init(NUM_CLIENT_THREADS,NUM_SERVER_THREADS,NUM_SHARDS);
-
-	//printf("KoS inited");
 
 	if (ret!=0)  {
 			printf("kos_init failed with code %d!\n",ret);
@@ -171,5 +140,6 @@ int main(int argc, const  char* argv[] ) {
 		}
            }
 
+	printf("\n--> TEST PASSED <--\n");
 	return 0;
 }

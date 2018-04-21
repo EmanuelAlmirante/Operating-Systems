@@ -37,7 +37,7 @@ void *client_thread(void *arg) {
 		}
 	}
 
-	printf("------------------- %d:1/6 ENDED INSERTING -----------------------\n",client_id);
+	printf("------------------- %d:1/4 ENDED INSERTING -----------------------\n",client_id);
 
 	for (j=NUM_SHARDS-1; j>=0; j--) {	
 		for (i=0; i<NUM_EL; i++) {
@@ -54,7 +54,7 @@ void *client_thread(void *arg) {
 		}
 	}
 	
-	printf("------------------ %d:2/6 ENDED READING  ---------------------\n",client_id);
+	printf("------------------ %d:2/4 ENDED READING  ---------------------\n",client_id);
 
 	for (j=NUM_SHARDS-1; j>=0; j--) {	
 		for (i=NUM_EL-1; i>=NUM_EL/2; i--) {
@@ -70,7 +70,7 @@ void *client_thread(void *arg) {
 		}
 	}
 
-	printf("----------------- %d-3/6 ENDED REMOVING -------------------------\n",client_id);
+	printf("----------------- %d-3/4 ENDED REMOVING -------------------------\n",client_id);
 
 	for (j=NUM_SHARDS-1; j>=0; j--) {	
 		for (i=0; i<NUM_EL; i++) {
@@ -89,50 +89,10 @@ void *client_thread(void *arg) {
 		}
 	}
 
-	printf("----------------- %d-4/6 ENDED CHECKING AFTER REMOVE -----------------\n",client_id);
+	printf("----------------- %d-4/4 ENDED CHECKING AFTER REMOVE -----------------\n",client_id);
 
 
-	for (j=NUM_SHARDS-1; j>=0; j--) {	
-		for (i=0; i<NUM_EL; i++) {
-			sprintf(key, "k-c%d-%d",client_id,i);
-			sprintf(value, "val:%d",i*10);
-			sprintf(value2, "val:%d",i*1);
-			v=kos_put(client_id, j, key,value);
 
-			if (i>=NUM_EL/2 && v!=NULL) {
-				printf("Error when getting key %s value should be NULL and was returned %s",key,v);
-				exit(1);
-			}
-			if (i<NUM_EL/2 && strncmp(v,value2,KEY_SIZE)!=0 ) {
-				printf("Error on key %s value should be %s and was returned %s",key,value2,v);
-				exit(1);
-			}
-
-
-			DEBUG("C:%d  <%s,%s> inserted in shard %d. Prev Value=%s\n", client_id, key, value, j, ( v==NULL ? "<missing>" : v ) );
-		}
-	}
-
-	printf("----------------- %d-5/6 ENDED 2nd PUT WAVE ----------------\n",client_id);
-
-
-	for (j=NUM_SHARDS-1; j>=0; j--) {	
-		for (i=0; i<NUM_EL; i++) {
-			sprintf(key, "k-c%d-%d",client_id,i);
-			sprintf(value, "val:%d",i*10);
-			v=kos_get(client_id, j, key);
-			if (strncmp(v,value,KEY_SIZE)!=0) {
-				printf("Error on key %s value should be %s and was returned %s",key,value,v);
-				exit(1);
-			}
-			DEBUG("C:%d  %s %s found in shard %d: value=%s\n", client_id, key, ( v==NULL ? "has not been" : "has been" ),j,
-									( v==NULL ? "<missing>" : v ) );
-	
-		}
-	}
-	
-
-	printf("----------------- %d-6/6 THE END ----------------------\n",client_id);
 
 	return NULL;
 }
@@ -170,6 +130,8 @@ int main(int argc, const  char* argv[] ) {
 			return -1;
 		}
            }
+
+	printf("\n--> TEST PASSED <--\n");
 
 	return 0;
 }
