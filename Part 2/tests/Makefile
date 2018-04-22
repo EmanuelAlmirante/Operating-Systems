@@ -1,20 +1,19 @@
-##SRCS=test_kos_single_threaded.c 
-#SRCS=test_kos_multi_threaded.c
-SRCS=test_kos_multi_threaded_all_getAll_fromFile.c
+SRCS=test_kos_multi_threaded_all_getAll_fromFile.c test_kos_multi_threaded_time.c
 OBJS=${SRCS:.c=}
 
-INCLUDES = -I. -I$(srcdir) -I../include -I ../include 
+INCLUDES =  -I ../include 
 CC = gcc
-CFLAGS ?= -g -O0 -Wall -pthread 
-DEFS ?= -DHAVE_CONFIG_H -DUSE_PTHREADS
 LIBKOS =  ../kos/libkos.a
+CFLAGS = -g -O0 -Wall -pthread $(INCLUDES) 
 
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(CFLAGS)
 
 all: $(OBJS)
 
-$(OBJS): $(SRCS)
-	$(COMPILE) -o $@ $<  $(LIBKOS)
+test_kos_multi_threaded_all_getAll_fromFile: test_kos_multi_threaded_all_getAll_fromFile.c $(LIBKOS)
+
+test_kos_multi_threaded_time: test_kos_multi_threaded_time.c $(LIBKOS)
+
 
 clean: 
 	rm -f $(OBJS)

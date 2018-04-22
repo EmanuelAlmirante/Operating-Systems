@@ -7,7 +7,7 @@ typedef struct request {
 	char key[KV_SIZE];
 	char value[KV_SIZE];
 	int shardId;
-	int command; //1,2,3,4 according to the command.
+	int command; // 1,2,3,4 according with the command.
 } request;
 
 typedef struct answer {
@@ -17,15 +17,14 @@ typedef struct answer {
 	KV_t* vec;
 } answer;
 
-typedef struct semaphores {
-	sem_t sem_client;
-	sem_t sem_server;
-} semaphores;
+typedef struct semaphore {
+	sem_t sem_answer;
+} semaphore;
 
 typedef struct info {
 	request* ptr_request;
 	answer* ptr_answer;
-	semaphores* ptr_semaphores;	
+	semaphore* ptr_semaphore;
 } info;
 
 /*Initializes the buffer*/

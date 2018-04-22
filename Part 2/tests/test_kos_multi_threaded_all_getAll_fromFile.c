@@ -5,14 +5,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define NUM_EL 500
-#define NUM_SHARDS 1
-#define NUM_CLIENT_THREADS 4
-#define NUM_SERVER_THREADS 4
+#define NUM_EL 5
+#define NUM_SHARDS 3
+#define NUM_CLIENT_THREADS 3
+#define NUM_SERVER_THREADS 3
 
 #define KEY_SIZE 20
 
-//#define DEBUG_PRINT_ENABLED 1  // uncomment to enable DEBUG statements
+// #define DEBUG_PRINT_ENABLED 1  // uncomment to enable DEBUG statements
 #if DEBUG_PRINT_ENABLED
 #define DEBUG printf
 #else
@@ -53,7 +53,7 @@ void *client_thread(void *arg) {
 		sprintf(key, "k-c%d-%d",client_id,i);
 		sprintf(value, "val:%d",i);
 		v=kos_put(client_id, client_id, key,value);
-		DEBUG("C:%d  <%s,%s> inserted in shard %d. Prev Value=%s\n", client_id, key, value, client_id, ( v==NULL ? "<missing>" : v ) );
+		DEBUG("C:%d  <%s,%s> inserted in shard %d. Prev Value=%s\n", client_id, key, value, j, ( v==NULL ? "<missing>" : v ) );
 	}
 
 	printf("------------------- %d:1/7 ENDED INSERTING -----------------------\n",client_id);
@@ -145,7 +145,7 @@ void *client_thread(void *arg) {
 			}
 
 
-			DEBUG("C:%d  <%s,%s> inserted in shard %d. Prev Value=%s\n", client_id, key, value, client_id, ( v==NULL ? "<missing>" : v ) );
+			DEBUG("C:%d  <%s,%s> inserted in shard %d. Prev Value=%s\n", client_id, key, value, clent_id, ( v==NULL ? "<missing>" : v ) );
 		}
 
 
