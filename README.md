@@ -14,7 +14,9 @@ This repository hosts the project of the course of Operating Systems.
     - [Dispersion tables used to save the data of KOS](https://github.com/EmanuelAlmirante/Operating-Systems/blob/master/README.md#dispersion-tables-used-to-save-the-data-of-kos)
     - [Buffer to the communication between client and server tasks](https://github.com/EmanuelAlmirante/Operating-Systems/blob/master/README.md#buffer-to-the-communication-between-client-and-server-tasks)
     - [Synchronization between server tasks to access the data saved in KOS](https://github.com/EmanuelAlmirante/Operating-Systems/blob/master/README.md#synchronization-between-server-tasks-to-access-the-data-saved-in-kos)
-
+  - [Compile the code](https://github.com/EmanuelAlmirante/Operating-Systems/blob/master/README.md#compile-the-code)
+  - [Testing](https://github.com/EmanuelAlmirante/Operating-Systems/blob/master/README.md#testing)
+  
 ## Objectives
 
 The objective of this project is to develop a system for the storage of data caleed KOS (_Key-value store of the Operating Systems course_).
