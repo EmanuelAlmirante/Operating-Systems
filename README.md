@@ -83,5 +83,13 @@ The diagram in Figure 4 (see it in the PDF) shows the solution aforementioned. T
 In this first phase of the project it is enough to develop simple solutions (for example, based in the use of a single lock/semaphore) to synchronize the access of the server tasks to the data saved in KOS. One of the objectives of the second part of the project is to improve the performance of the system by integrating sychronizations schemes that will allow to reach higher parallelism levels.
 
 Before starting to process any request from the buffer, each server task should execute a call to the function _delay()_, defined by the files: _include/delay.h_ and _kos/delay.c_. This function injects a delay (to simulate, for example, the indeterminism of an operating system), suspending the execution of the task for a period of time (configurable in the file _delay.c_) and allowing to exercise the mechanisms of synchronization between the server tasks. 
- 
+
+### Compile the code
+
+In the folder _/kos/_, open a terminal and execute the command **_make_**, to compile all the _.c_ files.
+
+### Testing
+
+In the foldes _/tests/_, open a terminal, execute the command **_make_**, to compile all the _.c_ files, and then execute the command **_sh doAllTests.sh_**.
+
 **UNDER CONSTRUCTION**
