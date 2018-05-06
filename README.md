@@ -16,6 +16,14 @@ This repository hosts the project of the course of Operating Systems.
     - [Synchronization between server tasks to access the data saved in KOS](https://github.com/EmanuelAlmirante/Operating-Systems/blob/master/README.md#synchronization-between-server-tasks-to-access-the-data-saved-in-kos)
   - [Compile the code](https://github.com/EmanuelAlmirante/Operating-Systems/blob/master/README.md#compile-the-code)
   - [Testing](https://github.com/EmanuelAlmirante/Operating-Systems/blob/master/README.md#testing)
+- [Part 2](https://github.com/EmanuelAlmirante/Operating-Systems/blob/master/README.md#part-2)
+  - [KOS: Key value store of the OS course](https://github.com/EmanuelAlmirante/Operating-Systems/blob/master/README.md#kos-key-value-store-of-the-os-course-1)
+  - [Requisites of the second part of the project](https://github.com/EmanuelAlmirante/Operating-Systems/blob/master/README.md#requisites-of-the-second-part-of-the-project) 
+    - [Concurrency](https://github.com/EmanuelAlmirante/Operating-Systems/blob/master/README.md#concurrency)
+    - [Persistence of data in KOS](https://github.com/EmanuelAlmirante/Operating-Systems/blob/master/README.md#persistence-of-data-in-kos)
+  - [Compile the code](https://github.com/EmanuelAlmirante/Operating-Systems/blob/master/README.md#compile-the-code-1)
+  - [Testing](https://github.com/EmanuelAlmirante/Operating-Systems/blob/master/README.md#testing-1)
+  
   
 ## Objectives
 
