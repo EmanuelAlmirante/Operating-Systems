@@ -94,4 +94,77 @@ In the folder _/kos/_, open a terminal and execute the command **_make_**, to co
 
 In the foldes _/tests/_, open a terminal, execute the command **_make_**, to compile all the _.c_ files, and then execute the command **_sh doAllTests.sh_**.
 
-**UNDER CONSTRUCTION**
+## Part 2
+
+### KOS: Key value store of the OS course
+
+Now we assume that:
+  
+  - The number of clients is different, and tendentially higher, of the number of servers.
+  
+  - KOS is persistent, this is, the data stored in it survives the activities that created or accessed them.
+  
+The new functionalities are specified in a way to allow the reuse of what was already developed in the first part of the project: all conceptual characteristics are maintained and the general architecture of KOS (Figure 1 and 2 of the PDF of the first part), as well as the structure of data of each partitiion (Figure 3 of the PDF of the first part). The model of interaction client-server is also the same:
+
+  _The client tasks should not access directly the state of KOS. Instead, this tasks should interact with the server tasks using the functions specified in the file_ kos_client.h_._
+  
+The new functionalities will affect the management of the communication between clients and servers, in the control of concurrency in the access to the data saved in KOS in memory and in the persistent storage of the data.
+
+### Requisites of the second part of the project
+
+#### Concurrency
+
+It is considered in this part, in a more realistic way, that the number of clients is different from the number of servers (tendentially higher).
+
+**Number of Clients != Number of Servers**
+
+In the first part of the project there was a one-to-one correspondence between a client and it's server. It is now intended that the buffer of communication between clients and servers will transmit requests of M clients to N serves, being M not equal to N.
+
+A client puts a request of service in the buffer, being attended by a server that is available in that moment. Established an association between a server and a client for the attendance of a request the interaction between both - allocation of buffer slots, model of synchronization, transference of data through the buffer - it should be adjusted (relatively to what was developed in the first part) to allow a dynamic connection between the client and the server of the client's request.
+
+In the initialization it is assumed that the servers are up first than the clients and wait for the client's requests.
+
+**Parallelism in the access to KOS**
+
+Increasing the number of clients, the load in the servers, measured by the number of requests, tends to increase. That is why it is important to minimize containment between servers in the access to data of KOS that is in memory.
+
+Keeping the model of data of KOS and the operations in it involved - _get_, _put_, _remove_, _getAllKeys_ - there are multiple approaches to increase concurrency. Some options are indicated below:
+
+  - Allow parallel accesses to different partitions;
+  - Allow reading accesses (_get_, _getAllKeys_) parallel in one partition;
+  - Allow parallel accesses to distinct lists in a partition;
+  - Allow search sequences (scanning of a list before reaching  the local of the _put_ or _remove_)) and reading accesses parallel in a partition.
+  
+It should be noted that the chosen option has implications in the management of concurrency of accesses to the filesystem to propagate the changes to KOS in memory.
+
+#### Persistence of data in KOS
+
+It is intended that the data of KOS is stored in a persistent way in the filesystem of UNIX.
+
+Each partition should be stored in a file called _fshardId_. The file is updated as the partition in memory is changed. The data flow of KOS between the memory and the filesystem obeys the following rules:
+
+  - The initialization of each partition in memory is done from the corresponding file in the phase of initialization of the system.
+    - If that file does not exist it is assumed that the partition has no data, and it should be initialized empty in memory and the corresponding file created and initialized.
+  - The reading operations (_get_, _getAllsKeys_) do not change the partitions in memory, so there is no change in the file-partition.
+  - The writing is atomic, this is, the operation of writing due from the execution of a request _put_ or _remove_ is performed in the partition in memory and it is immediately propagated to the file-partition.
+    - An operatin that implies a write (_put_, _remove_) is only considered concluded after the writing of the information in memory and in the file. It is considered that the write in the file was performed after the return of the call to the function of the API of the UNIX filesystem that performs the writing.
+    
+Since the pairs _Key-Value_ continue to be manipulated by the servers in the partitions in memory, the data to store in the file-partition may follow a structure more simple and compact:
+
+  _Number of pairs_ Key-Value _stored inthe file_ - int NPKV - _followed by the sequence of the pairs_ Key-Value _stored with in no particular order (option P0)._
+  
+This solution, although very simple, forces to search the pairs <key, value> that are intended to be accessed - to delete (_remove_) or to update (_put_) - in a sequential scanning of the file. After this is implemented and the persistence of KOS is successfuly tested, more efficient implementation alternatives to allow the sequential scanning of the files and keep them compact should be investigated.
+
+The following optimizations are to be considered:
+
+  - P1; storage in the primary memory of the position (offset)of the register <key, value> into file, avoiding scanning.
+  - P2; periodic compression of the file, eliminating empty records as a result of _removes_.
+  - P3; reoccupation of empty <key, value> slots in new inserts, optimizing the addresses of these positions by storing their offset in the file that is in the list or in the bitmap residing in memory.
+  
+### Compile the code
+
+In the folder _/kos/_, open a terminal and execute the command **_make_**, to compile all the _.c_ files.
+
+### Testing
+
+In the foldes _/tests/_, open a terminal, execute the command **_make_**, to compile all the _.c_ files, and then execute the command **_sh doAllTests.sh_**.
